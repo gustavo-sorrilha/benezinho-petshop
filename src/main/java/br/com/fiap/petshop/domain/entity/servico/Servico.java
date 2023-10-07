@@ -7,29 +7,44 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+@Entity
+@Table(name = "TB_SERVICO")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TP_SERVICO")
 public  class Servico {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_SERVICO")
+    @SequenceGenerator(name = "SQ_SERVICO", sequenceName = "SQ_SERVICO", allocationSize = 1, initialValue = 1)
+    @Column(name = "ID_SERVICO")
     private Long id;
 
+
+    @Column(name = "VALOR_SERVICO")
     private BigDecimal valor;
 
     @JsonbDateFormat
+    @Column(name = "DT_ABERTURA_SERVICO")
     private LocalDateTime abertura = LocalDateTime.now();
 
     @JsonbDateFormat
+    @Column(name = "DT_AUTORIZACAO_SERVICO")
     private LocalDateTime autorizacao;
 
     @JsonbDateFormat
+    @Column(name = "DT_CONCLUSAO_SERVICO")
     private LocalDateTime conclusao;
-
+    @Column(name = "DESCRICAO_SERVICO")
     private String descricao;
-
+    @Column(name = "OBSERVACAO_SERVICO")
     private String observacao;
 
-
-
+    @ManyToOne
+    @JoinColumn(
+            name = "ANIMAL",
+            referencedColumnName = "ID_ANIMAL",
+            foreignKey = @ForeignKey(name = "FK_ANIMAL_SERVICO")
+    )
     private Animal animal;
 
     protected Servico() {
